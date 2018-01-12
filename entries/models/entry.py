@@ -17,7 +17,7 @@ class Entry(ActivatableCreateableModel):
     is_billable = BooleanField()
     office = ForeignKey('employees.Office', related_name='entries', on_delete=DO_NOTHING)
     entry_status = ForeignKey('EntryStatus', related_name='entries', on_delete=DO_NOTHING)
-    parent = ForeignKey('self', related_name='modified_edtries', on_delete=DO_NOTHING)
+    parent = ForeignKey('self', related_name='modified_edtries', on_delete=DO_NOTHING, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Entries"
