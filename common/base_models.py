@@ -27,8 +27,16 @@ class ActivatableCreateableModel(Model):
 
 
 class ModifiableModel(Model):
-    # You must implement a 'parent' field in the subclass
-    pass
+    user = ForeignKey(User, on_delete=DO_NOTHING)
+
+    class Meta:
+        abstract = True
+
+
+class ActivatableCreateableModifiableModel(Model):
+    is_active = BooleanField(default=True)
+    created_date = DateTimeField(auto_now_add=True)
+    user = ForeignKey(User, on_delete=DO_NOTHING)
 
     class Meta:
         abstract = True

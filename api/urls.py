@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from billing import views as billingviews
 from clients import views as clientviews
 from projects import views as projectviews
+from employees import views as employeeviews
 
 router = DefaultRouter()
 router.register(r'bill-rates', billingviews.BillRatesViewSet, base_name='billrate')
@@ -15,6 +16,8 @@ router.register(r'project-types', projectviews.ProjectTypesViewSet, base_name='p
 router.register(r'project-statuses', projectviews.ProjectStatusesViewSet, base_name='projectstatus')
 router.register(r'projects', projectviews.ProjectsViewSet, base_name='project')
 router.register(r'project-subsets', projectviews.ProjectSubsetsViewSet, base_name='projectsubset')
+router.register(r'offices', employeeviews.OfficesViewSet, base_name='office')
+router.register(r'employees', employeeviews.EmployeesViewSet, base_name='employee')
 
 urlpatterns = [
     path('', include(router.urls))

@@ -52,10 +52,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_type',
             'is_active',
             'created_date',
+            'project_subsets',
         )
 
 
 class ProjectReadSerializer(ProjectSerializer):
+    project_subsets = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='projectsubset-detail'
+    )
     client = ClientSerializer()
     work_order = serializers.StringRelatedField()
     project_type = ProjectTypeSerializer()

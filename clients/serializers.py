@@ -32,8 +32,11 @@ class ClientSerializer(serializers.ModelSerializer):
             'zip_code',
             'phone',
             'primary_contact',
+            'created_date',
+            'user',
         )
 
 
 class ClientReadSerializer(ClientSerializer):
     primary_contact = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()

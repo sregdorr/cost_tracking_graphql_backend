@@ -1,10 +1,10 @@
 from django.db.models import CharField, ForeignKey, \
     DO_NOTHING, Model
 
-from common.base_models import ActivatableCreateableModel
+from common.base_models import ActivatableCreateableModel, ActivatableCreateableModifiableModel
 
 
-class Client(ActivatableCreateableModel):
+class Client(ActivatableCreateableModifiableModel):
     client_name = CharField(max_length=50)
     address = CharField(max_length=50, null=True, blank=True)
     city = CharField(max_length=50, null=True, blank=True)
