@@ -41,6 +41,13 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'graphene_django',
     'api',
+    'employees',
+    'invoicing',
+    'clients',
+    'projects',
+    'billing',
+    'tasks',
+    'entries'
 ]
 
 MIDDLEWARE = [
