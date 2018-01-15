@@ -22,6 +22,12 @@ class OfficeSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    manager_url = serializers.HyperlinkedRelatedField(
+        source='manager',
+        read_only=True,
+        view_name='employee-detail'
+    )
+
     class Meta:
         model = models.Employee
         fields = (
@@ -34,30 +40,46 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'cell_phone',
             'office_phone',
             'office_ext',
+            'manager_url',
             'manager',
             'office',
             'current_week_start',
             'is_active',
             'created_date',
-            'position',
-            'projects',
+            'positions',
+        )
+
+
+class EmployeeSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Employee
+        fields = (
+            'id',
+            'url',
+            'first_name',
+            'last_name'
         )
 
 
 class EmployeeReadSerializer(EmployeeSerializer):
-    projects = serializers.HyperlinkedRelatedField(
+    positions = BillRateSerializer(
         many=True,
-        read_only=True,
-        view_name='project-detail'
+        read_only=True
     )
-    manager = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='employee-detail'
-    )
-    office = serializers.StringRelatedField()
-    position = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='billrate-detail'
-    )
+    # projects = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='project-detail'
+    # )
+    manager = EmployeeSimpleSerializer()
+    # manager = serializers.HyperlinkedRelatedField(
+    #     many=False,
+    #     read_only=True,
+    #     view_name='employee-detail'
+    # )
+    # office = serializers.StringRelatedField()
+    # position = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='billrate-detail'
+    # )

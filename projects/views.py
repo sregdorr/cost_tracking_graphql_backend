@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from common.mixins.view_mixins import MultiSerializerViewSetMixin
 from projects import serializers
@@ -16,7 +17,7 @@ class ProjectStatusesViewSet(ModelViewSet):
     serializer_class = serializers.ProjectStatusSerializer
 
 
-class ProjectsViewSet(MultiSerializerViewSetMixin, ModelViewSet):
+class ProjectsViewSet(NestedViewSetMixin, MultiSerializerViewSetMixin, ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = serializers.ProjectSerializer
     serializer_action_classes = {

@@ -1,10 +1,13 @@
+import uuid
+
 from django.db.models import CharField, ForeignKey, \
-    DateField, FloatField, BooleanField, DO_NOTHING, Model
+    DateField, FloatField, BooleanField, DO_NOTHING, Model, UUIDField
 
-from common.base_models import ActivatableCreateableModel
+from common.base_models import ActivatableCreateableModifiableModel
 
 
-class Entry(ActivatableCreateableModel):
+class Entry(ActivatableCreateableModifiableModel):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     entry_date = DateField()
     employee = ForeignKey('employees.Employee', related_name='entries', on_delete=DO_NOTHING)
     bill_rate = ForeignKey('billing.BillRate', related_name='entries', on_delete=DO_NOTHING)

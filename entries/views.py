@@ -11,6 +11,10 @@ class EntryStatusesViewSet(ModelViewSet):
     serializer_class = serializers.EntryStatusSerializer
 
 
-class EntriesViewSet(ModelViewSet):
+class EntriesViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = serializers.EntrySerializer
+    serializer_action_classes = {
+        'list': serializers.EntryReadSerializer,
+        'retrieve': serializers.EntryReadSerializer,
+    }

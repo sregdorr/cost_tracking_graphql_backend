@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from entries.models import EntryStatus, Entry
 
+from billing.serializers import BillRateSerializer
+
 
 class EntryStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +21,7 @@ class EntrySerializer(serializers.ModelSerializer):
             'id',
             'url',
             'entry_date',
+            'employee',
             'bill_rate',
             'task',
             'description',
@@ -33,3 +36,7 @@ class EntrySerializer(serializers.ModelSerializer):
             'is_active',
             'user',
         )
+
+
+class EntryReadSerializer(EntrySerializer):
+    bill_rate = BillRateSerializer

@@ -51,7 +51,7 @@ class BillRateSerializer(serializers.ModelSerializer):
             'url',
             'rate',
             'billable_item',
-            'overtime_bill_rate',
+            'overtime_rate',
             'client',
             'project',
         )

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from projects import models
-from clients.serializers import ClientSerializer
+import clients.serializers as client_serializers
 
 
 class ProjectTypeSerializer(serializers.ModelSerializer):
@@ -52,17 +52,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_type',
             'is_active',
             'created_date',
-            'project_subsets',
         )
 
 
 class ProjectReadSerializer(ProjectSerializer):
-    project_subsets = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='projectsubset-detail'
-    )
-    client = ClientSerializer()
+    # project_subsets = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='projectsubset-detail'
+    # )
+    client = client_serializers.ClientSerializer()
     work_order = serializers.StringRelatedField()
     project_type = ProjectTypeSerializer()
 

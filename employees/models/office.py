@@ -1,10 +1,13 @@
+import uuid
+
 from django.db.models import \
-    CharField, Model
+    CharField, Model, UUIDField
 
 from common.base_models import ActivatableCreateableModel
 
 
 class Office(ActivatableCreateableModel):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = CharField(max_length=50)
     address = CharField(max_length=50, null=True, blank=True)
     city = CharField(max_length=50, null=True, blank=True)

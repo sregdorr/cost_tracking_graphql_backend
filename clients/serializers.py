@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from clients import models
+import employees.serializers
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -22,21 +23,20 @@ class ContactSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Client
+        fields = '__all__'
+
+
+class ClientSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Client
         fields = (
             'id',
             'url',
             'client_name',
-            'address',
-            'city',
-            'state',
-            'zip_code',
-            'phone',
-            'primary_contact',
-            'created_date',
-            'user',
         )
 
 
 class ClientReadSerializer(ClientSerializer):
     primary_contact = serializers.StringRelatedField()
+    lead_employee = employees.serializers.EmployeeSerializer()
     user = serializers.StringRelatedField()

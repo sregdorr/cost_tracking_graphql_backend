@@ -1,0 +1,36 @@
+POST http://localhost:8000/api-token-auth?username=rrodgers&password=changeme!0
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-01-15T030401.200.json
+
+###
+
+POST http://localhost:8000/api-token-auth
+Accept: */*
+Cache-Control: no-cache
+
+{     "username": "rrodgers",     "password": "changeme!0" }
+
+<> 2018-01-15T030325.400.json
+
+###
+
+POST http://localhost:8000/api-token-auth
+Accept: */*
+Cache-Control: no-cache
+
+{     "username": "rrodgers",     "password": "changeme!0" }
+
+<> 2018-01-15T030236.500.html
+
+###
+
+POST http://localhost:8080/api-token-auth
+Accept: */*
+Cache-Control: no-cache
+
+{     "username": "rrodgers",     "password": "changeme!0" }
+
+###
+
