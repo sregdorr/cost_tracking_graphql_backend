@@ -1,19 +1,47 @@
 from graphene import Node
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.rest_framework.mutation import SerializerMutation
 from graphql_relay import from_global_id
 import graphene
 
 from api import models
+from clients.models import Client
+from employees import models
+from clients.serializers import ClientSerializer
+from employees.serializers import OfficeSerializer
 
 
-# class PositionType(DjangoObjectType):
-#     class Meta:
-#         model = models.Position
-#         filter_fields = ['position_name', 'bill_rate']
-#         interfaces = (Node,)
-#
-#
+class EntityInterface(object):
+    original_id = graphene.String()
+
+    def resolve_original_id(self, info):
+        return self.id
+
+
+class ClientType(EntityInterface, DjangoObjectType):
+    class Meta:
+        model = Client
+        filter_fields = {
+            'client_name': ['exact', 'icontains', 'istartswith'],
+        }
+        interfaces = (Node,)
+
+
+class EmployeeType(EntityInterface, DjangoObjectType):
+    class Meta:
+        model = models.Employee
+        filter_fields = ('first_name', 'last_name')
+        interfaces = (Node,)
+
+
+class OfficeType(EntityInterface, DjangoObjectType):
+    class Meta:
+        model = models.Office
+        filter_fields = ('description',)
+        interfaces = (Node,)
+
+
 # class EmployeeType(DjangoObjectType):
 #     class Meta:
 #         model = models.Employee
@@ -35,6 +63,37 @@ from api import models
 #         filter_fields = ['project_name', 'budget', 'start_date', 'end_date', 'client', 'project_lead']
 #
 #
+
+class Query(graphene.ObjectType):
+    class Meta:
+        abstract = True
+
+    client = Node.Field(ClientType)
+    all_clients = DjangoFilterConnectionField(ClientType)
+
+    employee = Node.Field(EmployeeType)
+    all_employees = DjangoFilterConnectionField(EmployeeType)
+
+    office = Node.Field(OfficeType)
+    all_offices = DjangoFilterConnectionField(OfficeType)
+
+    # def resolve_client(self, info, **kwargs):
+    #     id = kwargs.get('id')
+    #     client_name = kwargs.get('client_name')
+    #
+    #     if id is not None:
+    #         return Client.objects.get(pk=id)
+    #
+    #     if client_name is not None:
+    #         return Client.objects.get(client_name=client_name)
+    #
+    #     return None
+    #
+    #
+    # def resolve_all_clients(self, info, **kwargs):
+    #     return Client.objects.all()
+
+
 # class Query(object):
 #     all_positions = DjangoFilterConnectionField(PositionType)
 #     position = Node.Field(PositionType)
@@ -61,6 +120,36 @@ from api import models
 #         return models.Project.objects.all()
 #
 #
+
+class AddOffice(graphene.Mutation):
+    class Arguments:
+        description = graphene.String(required=True)
+        address = graphene.String()
+        city = graphene.String()
+        state = graphene.String()
+        zip_code = graphene.String()
+        phone = graphene.String()
+
+    ok = graphene.Boolean()
+    office = graphene.Field(OfficeType)
+
+    def mutate(self, info, **kwargs):
+        office = models.Office.objects.create(
+            description=kwargs.get('description'),
+            address=kwargs.get('address'),
+            city=kwargs.get('city'),
+            state=kwargs.get('state'),
+            zip_code=kwargs.get('zip_code'),
+            phone=kwargs.get('phone'),
+        )
+        return AddOffice(ok=True, office=office)
+
+
+class AddClient(SerializerMutation):
+    class Meta:
+        serializer_class = ClientSerializer
+
+
 # class AddPosition(graphene.Mutation):
 #     class Arguments:
 #         position_name = graphene.String(required=True)
@@ -158,9 +247,16 @@ from api import models
 #         return AddEmployee(ok=ok, employee=employee)
 #
 #
+
+class Mutation(graphene.ObjectType):
+    class Meta:
+        abstract = True
+
+    add_client = AddClient.Field()
+    add_office = AddOffice.Field()
+
 # class Mutation(object):
 #     add_position = AddPosition.Field()
 #     edit_position = EditPosition.Field()
 #     add_employee = AddEmployee.Field()
 #     add_client = AddClient.Field()
-

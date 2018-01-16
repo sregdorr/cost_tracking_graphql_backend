@@ -25,4 +25,5 @@ from api.views import PrivateGraphQLView, CsrfExemptGraphQLView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    path('graphql/', GraphQLView.as_view(graphiql=True))
 ]
